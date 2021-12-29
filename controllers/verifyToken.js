@@ -16,14 +16,14 @@ const verifyToken = (req, res, next) => {
 };
 
 const verifyTokenAndAuthorization = (req, res, next) => {
-  console.log("iska upar aya");
-  verifyToken(req, res, next, () => {
-    if (req.user.id === req.params.id || req.user.isAdmin) {
-      next();
-    } else {
-      res.status(403).json("you are not allowed to do that");
-    }
-  });
+  console.log("user id", req.user.id);
+  console.log("params id", req.params.id);
+  if (req.user.isAdmin) {
+    console.log("user matched", req.user.id);
+    next();
+  } else {
+    res.status(403).json("you are not allowed to do that");
+  }
 };
 
 const verifyTokenAdmin = (req, res, next) => {

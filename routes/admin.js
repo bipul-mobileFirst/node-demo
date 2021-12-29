@@ -1,23 +1,36 @@
 const router = require("express").Router();
 const Post = require("../model/Post");
+const postController = require("../controllers/postController");
+const userController = require("../controllers/userController");
 const {
   verifyToken,
   verifyTokenAndAuthorization,
   verifyTokenAdmin,
-} = require("./verifyToken");
+} = require("../controllers/verifyToken");
+const { upload } = require("../middleware/fileUpload");
 
-router.post("/create", verifyToken, verifyTokenAdmin, async (req, res) => {
-  const newPost = new Post({
-    title: req.body.title,
-    image: req.body.image,
-    postBody: req.body.postBody,
-  });
-  try {
-    const savePost = await newPost.save();
-    res.status(200).json(savePost);
-  } catch (error) {
-    res.status(500).json(error);
-  }
-});
+// create post
+router.post(
+  "/create",
+  verifyToken,
+  verifyTokenAdmin,
+  upload.single("image"),
+  postController.createPost
+);
+
+router.delete(
+  "/:postId",
+  verifyToken,
+  verifyTokenAdmin,
+  postController.deletePost
+);
+
+// get all users
+router.get(
+  "/all/users",
+  verifyToken,
+  verifyTokenAdmin,
+  userController.getAllUser
+);
 
 module.exports = router;

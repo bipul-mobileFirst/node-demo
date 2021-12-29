@@ -9,6 +9,7 @@ const UserSchema = new mongoose.Schema(
     city: { type: String, required: true },
     phone_no: { type: String, required: true, min: 10 },
     isAdmin: { type: Boolean },
+    isDelete: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

@@ -5,7 +5,6 @@ const verifyToken = (req, res, next) => {
   if (authHeader) {
     const token = authHeader.split(" ")[1];
     jwt.verify(token, process.env.JWT_SEC_KEY, (err, user) => {
-      console.log("jwt decode", user);
       if (err) res.status(403).json("token not valid");
       req.user = user;
       next();
@@ -16,10 +15,7 @@ const verifyToken = (req, res, next) => {
 };
 
 const verifyTokenAndAuthorization = (req, res, next) => {
-  console.log("user id", req.user.id);
-  console.log("params id", req.params.id);
   if (req.user.isAdmin) {
-    console.log("user matched", req.user.id);
     next();
   } else {
     res.status(403).json("you are not allowed to do that");
@@ -27,7 +23,6 @@ const verifyTokenAndAuthorization = (req, res, next) => {
 };
 
 const verifyTokenAdmin = (req, res, next) => {
-  console.log("idhr aya", req.user);
   if (req.user.isAdmin) {
     next();
   } else {

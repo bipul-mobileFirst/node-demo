@@ -20,13 +20,9 @@ const createPost = async (req, res) => {
 const getAllPost = async (req, res) => {
   try {
     const allPost = await Post.find();
-    if (allPost.length > 0) {
-      res.status(200).json(allPost);
-    } else {
-      res.status(404).json("post not found");
-    }
+    res.status(200).json(allPost);
   } catch (error) {
-    res.json(500).json(error);
+    res.json(405).json(error);
   }
 };
 
@@ -45,4 +41,35 @@ const deletePost = async (req, res) => {
   }
 };
 
-module.exports = { createPost, getAllPost, deletePost };
+// user like a post
+const likesPhotos = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.postId);
+    if (!post.likes.includes(req.user.id)) {
+      await post.updateOne({ $push: { likes: req.user.id } });
+      res.status(200).json("post liked");
+    } else {
+      res.status(200).json("post already liked");
+    }
+  } catch (error) {
+    res.status(403).json(error);
+  }
+};
+
+// user all liked post
+const allLikedPost = async (req, res) => {
+  try {
+    const post = await Post.find();
+    res.status(200).json(post);
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
+module.exports = {
+  createPost,
+  getAllPost,
+  deletePost,
+  likesPhotos,
+  allLikedPost,
+};

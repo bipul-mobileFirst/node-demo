@@ -1,5 +1,5 @@
 const Post = require("../model/Post");
-
+const Like = require("../model/Likes");
 // create a post
 const createPost = async (req, res) => {
   console.log(req.file);
@@ -44,12 +44,19 @@ const deletePost = async (req, res) => {
 // user like a post
 const likesPhotos = async (req, res) => {
   try {
-    const post = await Post.findById(req.params.postId);
-    if (!post.likes.includes(req.user.id)) {
-      await post.updateOne({ $push: { likes: req.user.id } });
-      res.status(200).json("post liked");
+    const like = await Like.findOne({
+      userId: req.user.id,
+      postId: req.params.postId,
+    });
+    if (!like) {
+      const likePost = await new Like({
+        postId: req.params.postId,
+        userId: req.user.id,
+      });
+      const saveLike = await likePost.save();
+      res.status(200).json(saveLike);
     } else {
-      res.status(200).json("post already liked");
+      res.status(406).json("post already liked");
     }
   } catch (error) {
     res.status(403).json(error);
@@ -59,8 +66,8 @@ const likesPhotos = async (req, res) => {
 // user all liked post
 const allLikedPost = async (req, res) => {
   try {
-    const post = await Post.find();
-    res.status(200).json(post);
+    const likedPost = await Like.find({ userId: req.user.id });
+    res.status(200).json(likedPost);
   } catch (error) {
     res.status(400).json(error);
   }

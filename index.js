@@ -6,6 +6,7 @@ const adminRoutes = require("./routes/admin");
 const userRoutes = require("./routes/user");
 const publicRoutes = require("./routes/post");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 const path = require("path");
 dotenv.config();
 const app = express();
@@ -18,6 +19,16 @@ mongoose
   })
   .then(console.log("database connected"))
   .catch((error) => console.log(error));
+app.use(cors());
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
+
 app.use(bodyParser.json());
 app.use(express.json());
 

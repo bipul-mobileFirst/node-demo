@@ -14,7 +14,7 @@ const register = async (req, res) => {
     qualification: req.body.qualification,
     city: req.body.city,
     phone_no: req.body.phone_no,
-    isAdmin: req.body.isAdmin,
+    isAdmin: req.body.isAdmin ? req.body.isAdmin : false,
   });
   try {
     const getEmail = await User.findOne({ email: req.body.email });
@@ -22,7 +22,7 @@ const register = async (req, res) => {
       const savedUser = await newUser.save();
       res.status(200).json(savedUser);
     } else {
-      res.status(500).json("email already exists");
+      res.status(409).json("email already exists");
     }
   } catch (error) {
     res.status(500).json(error);
@@ -33,7 +33,6 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
-    console.log(user);
     !user && res.status(401).json("user not found");
     const hashedPassword = CryptoJS.AES.decrypt(
       user.password,
@@ -53,7 +52,7 @@ const login = async (req, res) => {
     const { password, ...others } = user._doc;
     res.status(200).json({ ...others, accesstoken });
   } catch (error) {
-    res.status(402).json(error);
+    res.status(400).json(error);
   }
 };
 

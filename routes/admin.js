@@ -32,5 +32,12 @@ router.get(
   verifyTokenAdmin,
   userController.getAllUser
 );
+// active users
+router.get(
+  "/all/active/user",
+  verifyToken,
+  verifyTokenAdmin,
+  userController.getAllActiveUser
+);
 
 module.exports = router;

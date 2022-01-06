@@ -6,7 +6,7 @@ const {
 } = require("../controllers/verifyToken");
 const userController = require("../controllers/userController");
 
-router.put(
+router.delete(
   "/delete/:id",
   verifyToken,
   verifyTokenAndAuthorization,

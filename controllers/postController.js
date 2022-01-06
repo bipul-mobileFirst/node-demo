@@ -4,9 +4,9 @@ const Like = require("../model/Likes");
 const createPost = async (req, res) => {
   console.log(req.file);
   const newPost = new Post({
-    title: req.body.name,
+    title: req.body.title,
     image: req.file.filename,
-    postBody: req.body.desc,
+    // postBody: req.body.desc,
   });
   try {
     const savePost = await newPost.save();

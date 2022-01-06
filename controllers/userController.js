@@ -21,6 +21,7 @@ const deleteUser = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
+  console.log("iddd", req.params.id);
   try {
     const update = await User.findByIdAndUpdate(
       req.params.id,
@@ -46,5 +47,14 @@ const getAllUser = async (req, res) => {
     res.status(500).json(error);
   }
 };
+// get all user
+const getAllActiveUser = async (req, res) => {
+  try {
+    const users = await User.find({ isDelete: 0 });
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
 
-module.exports = { deleteUser, updateUser, getAllUser };
+module.exports = { deleteUser, updateUser, getAllUser, getAllActiveUser };

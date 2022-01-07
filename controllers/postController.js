@@ -15,6 +15,21 @@ const createPost = async (req, res) => {
     res.status(500).json(error);
   }
 };
+// update post
+const updatePost = async (req, res) => {
+  try {
+    const postUpdate = await Post.findByIdAndUpdate(
+      req.params.postId,
+      {
+        $set: req.body,
+      },
+      { new: true }
+    );
+    res.status(200).json("post updated");
+  } catch (error) {
+    res.status(405).json(error);
+  }
+};
 
 // get all post
 const getAllPost = async (req, res) => {
@@ -79,4 +94,5 @@ module.exports = {
   deletePost,
   likesPhotos,
   allLikedPost,
+  updatePost,
 };

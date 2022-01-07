@@ -17,6 +17,14 @@ router.post(
   upload.single("image"),
   postController.createPost
 );
+// update post
+router.put(
+  "/update/:postId",
+  verifyToken,
+  verifyTokenAdmin,
+  upload.single("image"),
+  postController.updatePost
+);
 
 router.delete(
   "/:postId",

@@ -77,6 +77,23 @@ const likesPhotos = async (req, res) => {
     res.status(403).json(error);
   }
 };
+// like a single post
+
+const likeSinglePost = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.postId);
+
+    if (!post.likes.includes(req.user.id)) {
+      await post.updateOne({ $push: { likes: req.user.id } });
+      res.status(200).json("The Post has been liked");
+    } else {
+      await post.updateOne({ $pull: { likes: req.user.id } });
+      res.status(200).json("The post has been disliked");
+    }
+  } catch (error) {
+    res.status(407).json(error);
+  }
+};
 
 // user all liked post
 const allLikedPost = async (req, res) => {
@@ -95,4 +112,5 @@ module.exports = {
   likesPhotos,
   allLikedPost,
   updatePost,
+  likeSinglePost,
 };
